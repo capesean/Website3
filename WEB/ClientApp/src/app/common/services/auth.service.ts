@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { BehaviorSubject, interval, Observable, of, Subscription, throwError, forkJoin } from "rxjs";
-import { catchError, first, map, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, Subscription, throwError, forkJoin, timer } from "rxjs";
+import { catchError, map, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import { AuthStateModel, AuthTokenModel, ChangePasswordModel, JwtTokenModel, LoginModel, PasswordRequirements, RefreshGrantModel, RegisterModel, ResetModel, ResetPasswordModel } from "../models/auth.models";
 import { ProfileModel } from "../models/profile.models";
@@ -17,7 +17,6 @@ export class AuthService {
     public state$: Observable<AuthStateModel>;
     public tokens$: Observable<AuthTokenModel>;
     public loggedIn$: Observable<boolean>;
-    private refreshScheduled = false;
 
     private refreshSubscription$?: Subscription;
 
@@ -62,12 +61,6 @@ export class AuthService {
                 this.scheduleRefresh();
                 this.initCompleted$.next(true);
             }),
-            catchError(err => {
-                this.logout();
-                this.updateState({ authReady: true });
-                this.initCompleted$.next(true);
-                return of(undefined as void);
-            }),
             shareReplay(1)
         );
 
@@ -110,7 +103,6 @@ export class AuthService {
     }
 
     logout(): void {
-        this.refreshScheduled = false;
         this.stopRefreshTimer();
 
         this.updateState({ jwtToken: null, tokens: null });
@@ -186,25 +178,29 @@ export class AuthService {
     }
 
     /** Token refresh */
-    refreshTokens(): Observable<AuthTokenModel> {
-        return this._state$.pipe(
-            first(),
-            map(() => this.retrieveTokens()),
-            mergeMap(tokens => {
-                if (!tokens) return of(undefined);
+    refreshTokens(): Observable<AuthTokenModel | undefined> {
+        const currentTokens = this.retrieveTokens();
 
-                return this.getTokens({ refresh_token: tokens.refresh_token }, "refresh_token").pipe(
-                    // after refreshing tokens, refresh profile too (roles may have changed)
-                    switchMap(newTokens => {
-                        if (!newTokens) return of(undefined);
-                        return this.ensureProfileLoadedOnce(true).pipe(map(() => newTokens));
-                    }),
-                    catchError(err => {
-                        if (err.status === 0 || err.status >= 500) return of(tokens); // keep current tokens
-                        if (window.location.pathname !== "/auth/login") this.router.navigate(["/auth/login"]);
-                        return of(undefined);
-                    })
-                );
+        if (!currentTokens?.refresh_token) {
+            return of(undefined);
+        }
+
+        return this.getTokens(
+            { refresh_token: currentTokens.refresh_token },
+            "refresh_token"
+        ).pipe(
+            catchError(err => {
+                if (this.isTransientDevAuthFailure(err)) {
+                    return of(currentTokens);
+                }
+
+                this.logout();
+
+                if (window.location.pathname !== "/auth/login") {
+                    this.router.navigate(["/auth/login"]);
+                }
+
+                return of(undefined);
             })
         );
     }
@@ -221,6 +217,7 @@ export class AuthService {
                 this.updateState({ tokens, jwtToken });
 
                 const notExpired = +tokens.expiration_date > Date.now();
+
                 if (notExpired) {
                     this.updateState({ authReady: true, jwtToken });
                     return of(tokens);
@@ -243,29 +240,35 @@ export class AuthService {
     }
 
     private scheduleRefresh(): void {
-        if (this.refreshScheduled) return;
-        this.refreshScheduled = true;
-
         this.stopRefreshTimer();
 
-        this.refreshSubscription$ = this.tokens$.pipe(first()).pipe(
-            mergeMap(tokens => {
-                if (!tokens) return of(undefined);
+        const tokens = this.retrieveTokens();
+        if (!tokens) return;
 
-                const expMs = Number(tokens.expiration_date);
-                const skewMs = 30_000; // refresh 30s early
-                const dueMs = Math.max(expMs - Date.now() - skewMs, 0);
+        const expMs = Number(tokens.expiration_date);
+        const skewMs = 30_000;
 
-                // first refresh at "dueMs", then keep refreshing on a normal cadence
-                return interval(dueMs).pipe(
-                    first(),
-                    switchMap(() => this.refreshTokens()),
-                    switchMap(() => interval((tokens.expires_in / 2) * 1000).pipe(
-                        mergeMap(() => this.refreshTokens())
-                    ))
-                );
-            })
-        ).subscribe();
+        let dueMs = expMs - Date.now() - skewMs;
+
+        // If already expired / too close, don't hammer the backend in a tight loop.
+        if (dueMs <= 0) {
+            dueMs = environment.production ? 5_000 : 30_000;
+        }
+
+        this.refreshSubscription$ = timer(dueMs).pipe(
+            switchMap(() => this.refreshTokens())
+        ).subscribe(result => {
+            if (result) {
+                this.scheduleRefresh();
+            }
+        });
+    }
+
+    private isTransientDevAuthFailure(err: any): boolean {
+        return !environment.production && (
+            err?.status === 0 ||
+            err?.status >= 500
+        );
     }
 
     private stopRefreshTimer() {
