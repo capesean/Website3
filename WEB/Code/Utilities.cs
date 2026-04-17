@@ -4,10 +4,10 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Transactions;
-using WEB.Models;
+using Website3.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace WEB.Utilities
+namespace Website3.Code
 {
     public class General
     {

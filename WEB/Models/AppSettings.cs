@@ -1,4 +1,6 @@
-﻿namespace WEB.Models
+﻿using Website3.Settings;
+
+namespace Website3.Models
 {
     public class AppSettings
     {
@@ -14,21 +16,6 @@
         public int RefreshTokenExpiryMinutes { get; set; }
     }
 
-    public class EmailSettings
-    {
-        public string SenderName { get; set; }
-        public string Sender { get; set; }
-        public string SubstitutionEmailAddress { get; set; }
-        public string EmailToErrors { get; set; }
-        public bool SendEmails { get; set; }
-        public bool SendErrorEmails { get; set; }
-        public string SMTP { get; set; }
-        public int SMTPPort { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public bool SSL { get; set; }
-
-    }
 
     public class AzureSettings
     {
@@ -39,12 +26,6 @@
         {
             public string BlobUri { get; set; }
             public string KeyIdentifier { get; set; }
-        }
-
-        public class DocumentsSettings
-        {
-            public string ConnectionString { get; set; }
-            public string ContainerName { get; set; }
         }
     }
 

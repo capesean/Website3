@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace WEB.Models
+namespace Website3.Models
 {
     public partial class ApplicationDbContext
     {

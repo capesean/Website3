@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WEB.Models
+namespace Website3.Models
 {
     public class UserDTO
     {

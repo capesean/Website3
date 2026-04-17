@@ -2,9 +2,8 @@ using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WEB;
-using WEB.Error;
-using WEB.Models;
+using Website3.Code;
+using Website3.Models;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +21,7 @@ if (!builder.Environment.IsDevelopment())
 {
     var credential = new DefaultAzureCredential();
 
-    await WEB.Utilities.General.EnsureDataProtectionBlobIsHotAsync(
+    await General.EnsureDataProtectionBlobIsHotAsync(
         appSettings.AzureSettings.DataProtection.BlobUri,
         credential);
 

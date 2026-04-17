@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Website3.Models;
 
-namespace WEB.Controllers
+namespace Website3.Controllers
 {
     [Route("api/[Controller]"), Authorize]
-    public class AppController : BaseApiController
+    public class AppController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> um, AppSettings appSettings) 
+        : BaseApiController(dbFactory, um, appSettings)
     {
-        public AppController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> um, AppSettings appSettings)
-            : base(dbFactory, um, appSettings) { }
-
         [HttpGet, Route("settings")]
         public IActionResult Get()
         {

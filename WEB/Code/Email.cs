@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
-using WEB.Models;
+using Website3.Models;
 using Task = System.Threading.Tasks.Task;
 using File = System.IO.File;
 
-namespace WEB
+namespace Website3.Code
 {
     public interface IEmailSender
     {

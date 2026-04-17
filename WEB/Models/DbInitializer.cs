@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
-namespace WEB.Models
+namespace Website3.Models
 {
     public class DbInitializer
     {

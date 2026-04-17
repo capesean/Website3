@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WEB.Migrations
+namespace Website3.Migrations
 {
     /// <inheritdoc />
     public partial class OpenIddictIndexes : Migration

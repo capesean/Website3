@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WEB.Models
+namespace Website3.Models
 {
     public class SettingsDTO
     {

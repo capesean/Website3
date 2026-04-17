@@ -1,24 +1,20 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WEB.Models;
-using System.Linq;
+using Website3.Models;
 
-namespace WEB.Controllers
+namespace Website3.Controllers
 {
     [Route("api/[Controller]"), AuthorizeRoles(Roles.Administrator)]
-    public class ErrorsController : BaseApiController
+    public class ErrorsController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> um, AppSettings appSettings) 
+        : BaseApiController(dbFactory, um, appSettings)
     {
-        public ErrorsController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> um, AppSettings appSettings) : base(dbFactory, um, appSettings) { }
-
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery]SearchOptions pagingOptions)
         {
-            if (pagingOptions == null) pagingOptions = new SearchOptions();
+            pagingOptions ??= new SearchOptions();
 
-            IQueryable<Models.Error> results = db.Errors;
+            IQueryable<Error> results = db.Errors;
 
             results = results.OrderByDescending(o => o.DateUtc);
 
@@ -35,7 +31,7 @@ namespace WEB.Controllers
             if (error == null)
                 return NotFound();
 
-            if (error.Exception != null) error.Exception.InnerException = await GetInnerExceptionAsync(error.Exception);
+            error.Exception?.InnerException = await GetInnerExceptionAsync(error.Exception);
 
             return Ok(error);
         }

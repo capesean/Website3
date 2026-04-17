@@ -1,23 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WEB.Controllers;
-using WEB.Models;
+using Website3.Models;
 
-namespace AuthorizationServer.Controllers
+namespace Website3.Controllers
 {
     [Route("api/[Controller]")]
-    public class ProfileController : BaseApiController
+    public class ProfileController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> _um, AppSettings _appSettings)
+        : BaseApiController(dbFactory, _um, _appSettings)
     {
-        public ProfileController(
-            IDbContextFactory<ApplicationDbContext> dbFactory,
-            UserManager<User> _um,
-            AppSettings _appSettings
-            )
-            : base(dbFactory, _um, _appSettings)
-        {
-        }
-
         [HttpGet]
         public async Task<IActionResult> Profile()
         {

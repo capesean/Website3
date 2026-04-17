@@ -1,9 +1,9 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
-using WEB.Models;
+using Website3.Models;
 using System.Net;
 
-namespace WEB
+namespace Website3
 {
     public static class Certificates
     {

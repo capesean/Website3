@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WEB.Models;
-using WEB.Reports.PDF;
+using Website3.Models;
+using Website3.Code.Reports;
 
-namespace WEB.Controllers
+namespace Website3.Controllers
 {
     [Route("api/[Controller]"), Authorize]
     public class DownloadsController : BaseApiController

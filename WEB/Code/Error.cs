@@ -1,11 +1,11 @@
-﻿using WEB.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Website3.Models;
 
-namespace WEB.Error
+namespace Website3.Code
 {
     public class HandledException : Exception
     {

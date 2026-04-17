@@ -7,16 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
-using WEB;
-using WEB.Controllers;
-using WEB.Models;
 using OpenIddict.Server.AspNetCore;
 using Microsoft.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using OpenIddict.Validation.AspNetCore;
-using WEB.Models.Authorization;
+using Website3.Models;
+using Website3.Models.Authorization;
+using Website3.Code;
 
-namespace AuthorizationServer.Controllers
+namespace Website3.Controllers
 {
     [Route("api/[Controller]")]
     public class AuthorizationController : BaseApiController

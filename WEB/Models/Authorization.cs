@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WEB.Models.Authorization
+namespace Website3.Models.Authorization
 {
     public class RegisterDTO
     {
