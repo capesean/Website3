@@ -9,7 +9,6 @@ using Website3.Models;
 using Microsoft.Extensions.Options;
 using Website3.Services;
 
-
 namespace Website3.Controllers
 {
     [Route("api/[Controller]"), Authorize]
