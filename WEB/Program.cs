@@ -42,8 +42,8 @@ else
 }
 
 // todo: this is not correct - find out a better way to get correct path
-appSettings.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), builder.Environment.IsDevelopment() ? "ClientApp\\src\\" : "wwwroot\\");
-appSettings.RootPath = Path.Combine(Directory.GetCurrentDirectory());
+appSettings.WebRootPath = builder.Environment.WebRootPath;
+appSettings.RootPath = builder.Environment.ContentRootPath;
 
 builder.Services.AddScoped<ApiExceptionAttribute>();
 
