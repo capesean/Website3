@@ -3,7 +3,6 @@ using Azure.Core;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Transactions;
 using Task = System.Threading.Tasks.Task;
 
 namespace Website3.Web.Code
@@ -56,17 +55,6 @@ namespace Website3.Web.Code
             }
 
             return new string(chars.ToArray());
-        }
-
-        public static TransactionScope CreateTransactionScope()
-        {
-            var transactionOptions = new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.ReadCommitted,
-                Timeout = TransactionManager.MaximumTimeout
-            };
-
-            return new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
         }
 
         public static async Task EnsureDataProtectionBlobIsHotAsync(string blobUri, TokenCredential credential)
