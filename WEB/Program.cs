@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Website3.Code;
 using Website3.Models;
+using Website3.Services;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,16 +23,16 @@ if (!builder.Environment.IsDevelopment())
     var credential = new DefaultAzureCredential();
 
     await General.EnsureDataProtectionBlobIsHotAsync(
-        appSettings.AzureSettings.DataProtection.BlobUri,
+        appSettings.Azure.DataProtection.BlobUri,
         credential);
 
     builder.Services.AddDataProtection()
         .SetApplicationName("Website3")
         .PersistKeysToAzureBlobStorage(
-            new Uri(appSettings.AzureSettings.DataProtection.BlobUri),
+            new Uri(appSettings.Azure.DataProtection.BlobUri),
             credential)
         .ProtectKeysWithAzureKeyVault(
-            new Uri(appSettings.AzureSettings.DataProtection.KeyIdentifier),
+            new Uri(appSettings.Azure.DataProtection.KeyIdentifier),
             credential);
 }
 else
@@ -40,11 +41,8 @@ else
         .SetApplicationName("Website3");
 }
 
-// todo: this is not correct - find out a better way to get correct path
 appSettings.WebRootPath = builder.Environment.WebRootPath;
 appSettings.RootPath = builder.Environment.ContentRootPath;
-
-builder.Services.AddScoped<ApiExceptionAttribute>();
 
 //builder.Services.AddControllers(options => options.Filters.Add(typeof(ApiExceptionAttribute)))
 builder.Services.AddControllersWithViews(options => options.Filters.Add(typeof(ApiExceptionAttribute)))
@@ -76,24 +74,23 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IIdentityService, IdentityService>();
 
-builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, optionsBuilder) =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions =>
         {
             sqlOptions.CommandTimeout(300);
             sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
         });
 
-    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-    options.UseOpenIddict();
+    optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    optionsBuilder.UseOpenIddict();
 });
 
-builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+builder.Services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions =>
         {
             sqlOptions.CommandTimeout(300);
@@ -101,9 +98,8 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
         }
     );
 
-    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-
-    options.UseOpenIddict();
+    optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    optionsBuilder.UseOpenIddict();
 
 }, ServiceLifetime.Scoped);
 
@@ -146,7 +142,13 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.ConfigureOpenIddict(appSettings);
 
 builder.Services.AddSingleton(appSettings);
-builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddSingleton(appSettings.Email);
+builder.Services.AddSingleton(appSettings.Azure.Documents);
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<ApiExceptionAttribute>();
+builder.Services.AddScoped<DocumentsStorageService>();
 
 var app = builder.Build();
 
@@ -195,7 +197,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-//app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.MapFallbackToFile("index.html");
 

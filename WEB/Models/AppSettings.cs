@@ -10,8 +10,8 @@ namespace Website3.Models
         public string SiteName { get; set; }
         public string CertificatePassword { get; set; }
         public bool UseApplicationInsights { get; set; }
-        public EmailSettings EmailSettings { get; set; }
-        public AzureSettings AzureSettings { get; set; }
+        public EmailSettings Email { get; set; }
+        public AzureSettings Azure { get; set; }
         public int AccessTokenExpiryMinutes { get; set; }
         public int RefreshTokenExpiryMinutes { get; set; }
     }
