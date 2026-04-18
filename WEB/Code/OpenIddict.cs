@@ -45,7 +45,7 @@ namespace Website3.Web.Code
                         else
                         {
                             // create a certificate using the CertificatePassword & store it for re-use
-                            var certificate = X509Certificate.GetCertificate(appSettings);
+                            var certificate = CertificateHelper.GetCertificate(appSettings);
                             options.AddEncryptionCertificate(certificate);
                             options.AddSigningCertificate(certificate);
                         }
@@ -56,7 +56,7 @@ namespace Website3.Web.Code
                         options.UseDataProtection();
 
                         // todo: production certificates should be stored in Azure key vault: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                        var certificate = X509Certificate.GetCertificate(appSettings);
+                        var certificate = CertificateHelper.GetCertificate(appSettings);
                         options.AddEncryptionCertificate(certificate);
                         options.AddSigningCertificate(certificate);
                     }
