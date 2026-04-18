@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 if (!builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddAzureKeyVault(
-        new Uri(builder.Configuration["KeyVault:VaultUri"]!),
+        new Uri(builder.Configuration["KeyVault:VaultUri"]),
         new DefaultAzureCredential());
 }
 

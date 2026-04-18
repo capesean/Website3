@@ -45,7 +45,7 @@ namespace Website3.Web.Code
                         else
                         {
                             // create a certificate using the CertificatePassword & store it for re-use
-                            var certificate = CertificateHelper.GetCertificate(appSettings);
+                            var certificate = CertificateHelper.GetLocalCertificate(appSettings);
                             options.AddEncryptionCertificate(certificate);
                             options.AddSigningCertificate(certificate);
                         }
@@ -55,8 +55,7 @@ namespace Website3.Web.Code
                         // this stores/retrieves the data protection key in azure blob storage, meaning logins persist beyond restarting (e.g. publishing)
                         options.UseDataProtection();
 
-                        // todo: production certificates should be stored in Azure key vault: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html
-                        var certificate = CertificateHelper.GetCertificate(appSettings);
+                        var certificate = CertificateHelper.GetKeyVaultCertificate(appSettings.Azure.CertificateThumbprint);
                         options.AddEncryptionCertificate(certificate);
                         options.AddSigningCertificate(certificate);
                     }

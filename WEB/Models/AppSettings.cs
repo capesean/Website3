@@ -19,6 +19,8 @@ namespace Website3.Web.Models
 
     public class AzureSettings
     {
+        public string CertificateThumbprint { get; set; }
+
         public DataProtectionSettings DataProtection { get; set; }
         public DocumentsSettings Documents { get; set; }
 
