@@ -26,6 +26,9 @@ if (!builder.Environment.IsDevelopment())
         appSettings.Azure.DataProtection.BlobUri,
         credential);
 
+    // ensure the app has managed identity enabled, and has:
+    // - access to the blob storage container for data protection keys (Storage Blob Data Contributor role)
+    // - access to the key vault for data protection keys (Key Vault Crypto User role)
     builder.Services.AddDataProtection()
         .SetApplicationName("Website3")
         .PersistKeysToAzureBlobStorage(
