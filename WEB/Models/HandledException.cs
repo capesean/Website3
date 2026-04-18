@@ -1,7 +1,6 @@
 namespace Website3.Models
 {
-    public enum Roles
+    public class HandledException(string message) : Exception(message)
     {
-        Administrator
     }
 }

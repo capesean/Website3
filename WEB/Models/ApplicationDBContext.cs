@@ -10,25 +10,13 @@ namespace Website3.Models
         public DbSet<Error> Errors { get; set; }
         public DbSet<ErrorException> Exceptions { get; set; }
 
-        private readonly IIdentityService identityService;
-        public bool UserIsInAnyRole(params Roles[] roles) => identityService.UserIsInAnyRole(roles);
         private Settings _settings;
 
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IIdentityService identityService
-            ) : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
-            this.identityService = identityService;
-
-            //ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             ChangeTracker.AutoDetectChangesEnabled = false;
         }
-
-        //public static ApplicationDbContext Create()
-        //{
-        //    return new ApplicationDbContext();
-        //}
 
         public Settings GetDbSettings()
         {
@@ -38,7 +26,6 @@ namespace Website3.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies(false);
-            //optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -67,26 +54,5 @@ namespace Website3.Models
 #pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
         }
 
-    }
-
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-    {
-        public ApplicationDbContext CreateDbContext(string[] args)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.development.json")
-                .Build();
-
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-            var httpContextAccessor = new HttpContextAccessor();
-            var identityService = new IdentityService(httpContextAccessor);
-
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer(connectionString, opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds));
-            optionsBuilder.UseOpenIddict();
-            return new ApplicationDbContext(optionsBuilder.Options, identityService);
-        }
     }
 }
