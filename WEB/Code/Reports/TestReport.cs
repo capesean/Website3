@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Threading.Tasks;
-using Website3.Models;
+using Website3.Web.Models;
 
-namespace Website3.Code.Reports
+namespace Website3.Web.Code.Reports
 {
     public class TestReport : PDFReports
     {

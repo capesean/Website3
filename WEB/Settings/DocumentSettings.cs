@@ -1,4 +1,4 @@
-﻿namespace Website3.Settings
+﻿namespace Website3.Web.Settings
 {
     public class DocumentsSettings
     {

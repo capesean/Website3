@@ -1,10 +1,10 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using Website3.Models;
+using Website3.Web.Models;
 using Element = iTextSharp.text.Element;
 using Document = iTextSharp.text.Document;
 
-namespace Website3.Code.Reports
+namespace Website3.Web.Code.Reports
 {
     public abstract class PDFReports
     {

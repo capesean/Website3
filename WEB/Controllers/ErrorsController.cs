@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Website3.Models;
+using Website3.Web.Models;
 
-namespace Website3.Controllers
+namespace Website3.Web.Controllers
 {
     [Route("api/[Controller]"), AuthorizeRoles(Roles.Administrator)]
     public class ErrorsController(IDbContextFactory<ApplicationDbContext> dbFactory, UserManager<User> um, AppSettings appSettings) 

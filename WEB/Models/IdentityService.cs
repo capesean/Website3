@@ -1,4 +1,4 @@
-﻿using Website3.Models;
+﻿using Website3.Web.Models;
 
 public interface IIdentityService
 {

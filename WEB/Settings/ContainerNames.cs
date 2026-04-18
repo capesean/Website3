@@ -1,7 +1,7 @@
-﻿namespace Website3.Settings
+﻿namespace Website3.Web.Settings
 {
     public static class ContainerNames
     {
-        public static string Documents = "docs";
+        public const string Documents = "docs";
     }
 }

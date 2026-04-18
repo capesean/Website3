@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.StaticFiles;
 using System.Net.Mime;
 
-namespace Website3.Models
+namespace Website3.Web.Models
 {
     public static class Download
     {

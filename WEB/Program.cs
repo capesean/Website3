@@ -2,9 +2,9 @@ using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Website3.Code;
-using Website3.Models;
-using Website3.Services;
+using Website3.Web.Code;
+using Website3.Web.Models;
+using Website3.Web.Services;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);

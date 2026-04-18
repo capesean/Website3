@@ -9,7 +9,7 @@
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>8478bfcd-a2e0-4e8e-8c09-579e68f0988d</UserSecretsId>
-    <RootNamespace>Website3</RootNamespace>
+    <RootNamespace>Website3.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
-﻿using Website3.Models;
+﻿using Website3.Web.Models;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace Website3.Code
+namespace Website3.Web.Code
 {
     public static class OpenIddictExtensions
     {

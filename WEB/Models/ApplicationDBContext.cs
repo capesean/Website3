@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Website3.Models
+namespace Website3.Web.Models
 {
     public partial class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {

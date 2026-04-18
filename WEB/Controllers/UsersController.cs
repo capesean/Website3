@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Website3.Models;
+using Website3.Web.Models;
 using Microsoft.Extensions.Options;
-using Website3.Services;
+using Website3.Web.Services;
 
-namespace Website3.Controllers
+namespace Website3.Web.Controllers
 {
     [Route("api/[Controller]"), Authorize]
     public class UsersController : BaseApiController

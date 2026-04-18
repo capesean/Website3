@@ -1,12 +1,12 @@
-﻿using Website3.Models;
+﻿using Website3.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Website3.Services;
+using Website3.Web.Services;
 
-namespace Website3.Code
+namespace Website3.Web.Code
 {
     public class ApiExceptionAttribute(AppSettings appSettings, IEmailService emailService, IDbContextFactory<ApplicationDbContext> dbFactory) : ExceptionFilterAttribute, IFilterMetadata
     {

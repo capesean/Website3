@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Website3.Code
+namespace Website3.Web.Code
 {
     public class DateTimeConverter : JsonConverter<DateTime>
     {

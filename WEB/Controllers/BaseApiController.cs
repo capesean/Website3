@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Validation.AspNetCore;
-using Website3.Models;
+using Website3.Web.Models;
 
-namespace Website3.Controllers
+namespace Website3.Web.Controllers
 {
     [ApiController, Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
     public class BaseApiController : ControllerBase
@@ -113,7 +113,7 @@ namespace Website3.Controllers
         public AuthorizeRolesAttribute(params Roles[] roles) : base()
         {
             Roles = string.Join(",", roles.Select(r => r.ToString()));
-            if (!roles.Contains(Models.Roles.Administrator)) Roles += ",Administrator";
+            if (!roles.Contains(Web.Models.Roles.Administrator)) Roles += ",Administrator";
         }
     }
 

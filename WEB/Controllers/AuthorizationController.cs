@@ -11,11 +11,11 @@ using OpenIddict.Server.AspNetCore;
 using Microsoft.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using OpenIddict.Validation.AspNetCore;
-using Website3.Models;
-using Website3.Models.Authorization;
-using Website3.Services;
+using Website3.Web.Models;
+using Website3.Web.Models.Authorization;
+using Website3.Web.Services;
 
-namespace Website3.Controllers
+namespace Website3.Web.Controllers
 {
     [Route("api/[Controller]")]
     public class AuthorizationController : BaseApiController

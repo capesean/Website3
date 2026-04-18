@@ -1,7 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
-namespace Website3.Services
+namespace Website3.Web.Services
 {
     public abstract class StorageServiceBase
     {

@@ -1,6 +1,6 @@
-﻿using Website3.Settings;
+﻿using Website3.Web.Settings;
 
-namespace Website3.Services
+namespace Website3.Web.Services
 {
     public class DocumentsStorageService : StorageServiceBase
     {

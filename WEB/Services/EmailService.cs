@@ -3,10 +3,10 @@ using System.Net.Mail;
 using System.Net.Mime;
 using Task = System.Threading.Tasks.Task;
 using File = System.IO.File;
-using Website3.Models;
-using Website3.Settings;
+using Website3.Web.Models;
+using Website3.Web.Settings;
 
-namespace Website3.Services
+namespace Website3.Web.Services
 {
     public interface IEmailService
     {
