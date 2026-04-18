@@ -5,7 +5,7 @@ namespace Website3.Web.Services
     public class DocumentsStorageService : StorageServiceBase
     {
         public DocumentsStorageService(DocumentsSettings settings)
-            : base(settings.ConnectionString, ContainerNames.Documents)
+            : base(settings.ConnectionString, settings.ContainerName)
         {
         }
     }

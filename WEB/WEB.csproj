@@ -8,8 +8,8 @@
     <SpaProxyServerUrl>https://localhost:44401</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>8478bfcd-a2e0-4e8e-8c09-579e68f0988d</UserSecretsId>
     <RootNamespace>Website3.Web</RootNamespace>
+    <UserSecretsId>e78efb6b-8bf7-4390-80a4-7676d5902d00</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -71,7 +71,7 @@
 
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)dist\**;$(SpaRoot)dist-server\**" />
-      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
