@@ -26,7 +26,7 @@ if (!builder.Environment.IsDevelopment())
         credential);
 
     builder.Services.AddDataProtection()
-        .SetApplicationName("WEB")
+        .SetApplicationName("Website3")
         .PersistKeysToAzureBlobStorage(
             new Uri(appSettings.AzureSettings.DataProtection.BlobUri),
             credential)
