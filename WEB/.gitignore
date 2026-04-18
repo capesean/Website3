@@ -351,5 +351,3 @@ MigrationBackup/
 
 ClientApp/dist/
 ClientApp/.angular/
-ClientApp/src/environments/environment.*.ts
-
