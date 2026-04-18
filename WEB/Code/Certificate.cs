@@ -9,8 +9,9 @@ namespace Website3.Web.Code
     {
         public static X509Certificate2 GetKeyVaultCertificate(string thumbprint)
         {
-            // ensure azure app has environment variable: WEBSITE_LOAD_CERTIFICATES = *
-            // also, add an app certificate (bring your own) and use the thumbprint from that. 
+            // ensure azure app has environment variable: WEBSITE_LOAD_CERTIFICATES = {THUMBPRINT}
+            // where {THUMBPRINT} is the thumbprint of the certificate uploaded to azure app service
+            // add a certificate (use the 'bring your own' option) and use the thumbprint from that screen. 
             // powershell code for generating as openiddict.pfx on desktop:
             /*************************************************************
             $pwd = ConvertTo-SecureString "---PUTYOURSTRONGPASSWORDHERE---" -AsPlainText -Force
