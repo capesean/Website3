@@ -9,7 +9,7 @@ using Website3.Web.Models;
 
 #nullable disable
 
-namespace Website3.Migrations
+namespace Website3.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230725133700_Initial")]

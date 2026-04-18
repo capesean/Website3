@@ -102,6 +102,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
         }
     );
 
+    //if (builder.Environment.IsDevelopment()) optionsBuilder.EnableSensitiveDataLogging();
     optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     optionsBuilder.UseOpenIddict();
 
