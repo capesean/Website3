@@ -37,7 +37,7 @@ if (!builder.Environment.IsDevelopment())
 else
 {
     builder.Services.AddDataProtection()
-        .SetApplicationName("WEB");
+        .SetApplicationName("Website3");
 }
 
 // todo: this is not correct - find out a better way to get correct path
