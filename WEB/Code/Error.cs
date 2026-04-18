@@ -1,29 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Website3.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using Website3.Models;
+using Website3.Services;
 
 namespace Website3.Code
 {
-    public class HandledException : Exception
+    public class ApiExceptionAttribute(AppSettings appSettings, IEmailService emailService, IDbContextFactory<ApplicationDbContext> dbFactory) : ExceptionFilterAttribute, IFilterMetadata
     {
-        public HandledException(string message) : base(message) { }
-    }
-
-    public class ApiExceptionAttribute : ExceptionFilterAttribute, IFilterMetadata
-    {
-        private readonly AppSettings appSettings;
-        private readonly IEmailSender emailSender;
-        private readonly IDbContextFactory<ApplicationDbContext> dbFactory;
-
-        public ApiExceptionAttribute(AppSettings appSettings, IEmailSender emailSender, IDbContextFactory<ApplicationDbContext> dbFactory)
-        {
-            this.appSettings = appSettings;
-            this.emailSender = emailSender;
-            this.dbFactory = dbFactory;
-        }
+        private readonly AppSettings appSettings = appSettings;
+        private readonly IEmailService emailService = emailService;
+        private readonly IDbContextFactory<ApplicationDbContext> dbFactory = dbFactory;
 
         public override void OnException(ExceptionContext context)
         {
@@ -57,19 +46,17 @@ namespace Website3.Code
 
             if (request.Method == "POST")
             {
-                using (StreamReader sr = new StreamReader(request.Body))
-                {
-                    if (request.Body.CanSeek) request.Body.Seek(0, SeekOrigin.Begin);
-                    if (request.Body.CanRead) form = sr.ReadToEndAsync().Result;
-                }
+                using StreamReader sr = new StreamReader(request.Body);
+                if (request.Body.CanSeek) request.Body.Seek(0, SeekOrigin.Begin);
+                if (request.Body.CanRead) form = sr.ReadToEndAsync().Result;
             }
 
-            if (!string.IsNullOrWhiteSpace(form) && form.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0)
+            if (!string.IsNullOrWhiteSpace(form) && form.Contains("password", StringComparison.OrdinalIgnoreCase))
             {
                 form = "<REMOVED DUE TO PASSWORD SENSITIVITY>";
             }
 
-            var error = new Models.Error
+            var error = new Error
             {
                 Id = Guid.NewGuid(),
                 DateUtc = DateTime.UtcNow,
@@ -100,7 +87,7 @@ namespace Website3.Code
             }
             catch { }
 
-            if (!string.IsNullOrWhiteSpace(appSettings.EmailSettings.EmailToErrors))
+            if (!string.IsNullOrWhiteSpace(appSettings.Email.EmailToErrors))
             {
                 var body = string.Empty;
                 body += "DATE: " + DateTime.UtcNow.ToString("dd MMMM yyyy, HH:mm:ss") + Environment.NewLine;
@@ -121,7 +108,7 @@ namespace Website3.Code
 
                 try
                 {
-                    emailSender.SendEmailAsync(appSettings.EmailSettings.EmailToErrors, appSettings.EmailSettings.EmailToErrors, appSettings.SiteName + " Error", body, isErrorEmail: true).Wait();
+                    emailService.SendEmailAsync(appSettings.Email.EmailToErrors, appSettings.Email.EmailToErrors, appSettings.SiteName + " Error", body, isErrorEmail: true).Wait();
                 }
                 catch { }
             }
@@ -130,7 +117,7 @@ namespace Website3.Code
 
     public static class Logger
     {
-        public static ErrorException ProcessExceptions(Models.Error error, Exception exception)
+        public static ErrorException ProcessExceptions(Error error, Exception exception)
         {
             if (exception == null) return null;
 

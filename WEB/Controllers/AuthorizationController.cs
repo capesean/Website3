@@ -13,28 +13,28 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 using OpenIddict.Validation.AspNetCore;
 using Website3.Models;
 using Website3.Models.Authorization;
-using Website3.Code;
+using Website3.Services;
 
 namespace Website3.Controllers
 {
     [Route("api/[Controller]")]
     public class AuthorizationController : BaseApiController
     {
-        private IOptions<IdentityOptions> opts;
+        private readonly IOptions<IdentityOptions> opts;
         private readonly SignInManager<User> signInManager;
-        private IEmailSender emailSender;
+        private readonly IEmailService emailService;
 
         public AuthorizationController(
             IDbContextFactory<ApplicationDbContext> dbFactory,
             UserManager<User> _um,
             AppSettings _appSettings,
             SignInManager<User> _sm,
-            IEmailSender _es,
+            IEmailService _es,
             IOptions<IdentityOptions> _opts)
             : base(dbFactory, _um, _appSettings)
         {
             signInManager = _sm;
-            emailSender = _es;
+            emailService = _es;
             opts = _opts;
         }
 
@@ -273,7 +273,7 @@ namespace Website3.Controllers
             body += Environment.NewLine;
             body += "Your password has been changed." + Environment.NewLine;
 
-            await emailSender.SendEmailAsync(user.Email, user.FullName, "Password Changed", body);
+            await emailService.SendEmailAsync(user.Email, user.FullName, "Password Changed", body);
 
             return Ok();
         }
@@ -298,7 +298,7 @@ namespace Website3.Controllers
             html += "<p>A password reset has been requested. Please use the link below to reset your password.</p>";
             html += AppSettings.RootUrl + "auth/reset?e=" + user.Email + "&t=" + WebUtility.UrlEncode(token) + Environment.NewLine;
 
-            await emailSender.SendEmailAsync(user.Email, user.FullName, "Password Reset", text, html);
+            await emailService.SendEmailAsync(user.Email, user.FullName, "Password Reset", text, html);
 
             return Ok();
         }
@@ -320,7 +320,7 @@ namespace Website3.Controllers
             body += Environment.NewLine;
             body += "Your password has been reset." + Environment.NewLine;
 
-            await emailSender.SendEmailAsync(user.Email, user.FullName, "Password Reset", body);
+            await emailService.SendEmailAsync(user.Email, user.FullName, "Password Reset", body);
 
             return Ok();
         }
