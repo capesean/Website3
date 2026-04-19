@@ -9,8 +9,23 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 var builder = WebApplication.CreateBuilder(args);
 
+/**********************************************
+ * on azure, the app should typically have a key vault with:
+ * - a key for encrypting data protection keys
+ * - secrets for storing sensitive configuration values (e.g. database connection string, email credentials, etc)
+ * - a certificate for signing tokens 
+ *   - (this is actually added under the app certificates - using upload on the 'bring your own' option - see the certificate generation code in certificate.cs)
+ *   - this requires the app to have an env settings of "WEBSITE_LOAD_CERTIFICATES" with a value of the thumbprint of the certificate
+ * the app should probably have the following permissions to the key vault:
+ * - Key Vault Crypto User
+ * - Key Vaults Secrets User
+ * - Key Vault Certificate User 
+ * also, the storage container that has the data protection keys should have the Storage Blob Data Contributor role assigned for the app
+ **********************************************/
+
 if (!builder.Environment.IsDevelopment())
 {
+    // this is the key vault uri for data protection keys
     builder.Configuration.AddAzureKeyVault(
         new Uri(builder.Configuration["KeyVault:VaultUri"]),
         new DefaultAzureCredential());
