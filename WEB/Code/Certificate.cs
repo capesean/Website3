@@ -14,21 +14,34 @@ namespace Website3.Web.Code
             // add a certificate (use the 'bring your own' option) and use the thumbprint from that screen. 
             // powershell code for generating as openiddict.pfx on desktop:
             /*************************************************************
-            $pwd = ConvertTo-SecureString "---PUTYOURSTRONGPASSWORDHERE---" -AsPlainText -Force
+$certPassword = "PUT-YOUR-REAL-STRONG-PASSWORD-HERE"
+$pwd = ConvertTo-SecureString $certPassword -AsPlainText -Force
 
-            $cert = New-SelfSignedCertificate `
-              -Subject "CN=openiddict" `
-              -CertStoreLocation "cert:\CurrentUser\My" `
-              -KeyAlgorithm RSA `
-              -KeyLength 2048 `
-              -KeyExportPolicy Exportable `
-              -NotAfter (Get-Date).AddYears(5) `
-              -FriendlyName "OpenIddict"
+$pfxPath = "$env:USERPROFILE\Desktop\openiddict.pfx"
 
-            Export-PfxCertificate `
-              -Cert "cert:\CurrentUser\My\$($cert.Thumbprint)" `
-              -FilePath "$env:USERPROFILE\Desktop\openiddict.pfx" `
-              -Password $pwd
+$cert = New-SelfSignedCertificate `
+  -Subject "CN=openiddict" `
+  -CertStoreLocation "cert:\CurrentUser\My" `
+  -KeyAlgorithm RSA `
+  -KeyLength 2048 `
+  -KeyExportPolicy Exportable `
+  -KeySpec Signature `
+  -HashAlgorithm SHA256 `
+  -NotAfter (Get-Date).AddYears(10) `
+  -FriendlyName "OpenIddict"
+
+Export-PfxCertificate `
+  -Cert "cert:\CurrentUser\My\$($cert.Thumbprint)" `
+  -FilePath $pfxPath `
+  -Password $pwd
+
+Write-Host ""
+Write-Host "PFX exported to: $pfxPath"
+Write-Host "Thumbprint: $($cert.Thumbprint)"
+Write-Host ""
+
+# Remove it from your local cert store after export
+Remove-Item "cert:\CurrentUser\My\$($cert.Thumbprint)"
             *************************************************************/
             using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
